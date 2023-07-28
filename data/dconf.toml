@@ -1,0 +1,266 @@
+[com/github/calo001/fondo]
+filter-mode='landscape'
+window-height=690
+window-width=1094
+window-x=79
+window-y=65
+
+[org/gnome/Geary]
+images-trusted-domains=['insideapple.apple.com', 'amazon.com']
+migrated-config=true
+
+[org/gnome/baobab/ui]
+is-maximized=false
+window-size=(960, 600)
+
+[org/gnome/calendar]
+active-view='month'
+window-maximized=true
+window-size=(768, 600)
+
+[org/gnome/control-center]
+last-panel='power'
+window-state=(1119, 809, false)
+
+[org/gnome/desktop/app-folders]
+folder-children=['Utilities', 'YaST']
+
+[org/gnome/desktop/app-folders/folders/Utilities]
+apps=['gnome-abrt.desktop', 'gnome-system-log.desktop', 'nm-connection-editor.desktop', 'org.gnome.baobab.desktop', 'org.gnome.Connections.desktop', 'org.gnome.DejaDup.desktop', 'org.gnome.Dictionary.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.eog.desktop', 'org.gnome.Evince.desktop', 'org.gnome.FileRoller.desktop', 'org.gnome.fonts.desktop', 'org.gnome.seahorse.Application.desktop', 'org.gnome.tweaks.desktop', 'org.gnome.Usage.desktop', 'vinagre.desktop']
+categories=['X-GNOME-Utilities']
+name='X-GNOME-Utilities.directory'
+translate=true
+
+[org/gnome/desktop/app-folders/folders/YaST]
+categories=['X-SuSE-YaST']
+name='suse-yast.directory'
+translate=true
+
+[org/gnome/desktop/calendar]
+show-weekdate=true
+
+[org/gnome/desktop/input-sources]
+current=uint32 0
+sources=[('xkb', 'us')]
+xkb-options=@as []
+
+[org/gnome/desktop/interface]
+color-scheme='default'
+cursor-theme='Adwaita'
+document-font-name='DejaVu Serif 12'
+font-antialiasing='rgba'
+font-hinting='medium'
+font-name='Droid Sans Fallback 10'
+gtk-theme='WhiteSur-Light'
+icon-theme='WhiteSur'
+monospace-font-name='DroidSansM Nerd Font 10'
+
+[org/gnome/desktop/notifications]
+application-children=['gnome-initial-setup', 'org-gnome-fileroller', 'org-gnome-nautilus', 'org-gnome-software', 'gnome-power-panel', 'firefox-esr', 'com-usebottles-bottles', 'steam', 'org-gnome-geary', 'org-gnome-evolution-alarm-notify', 'code', 'google-chrome', 'com-github-calo001-fondo']
+
+[org/gnome/desktop/notifications/application/code]
+application-id='code.desktop'
+
+[org/gnome/desktop/notifications/application/com-github-calo001-fondo]
+application-id='com.github.calo001.fondo.desktop'
+
+[org/gnome/desktop/notifications/application/com-usebottles-bottles]
+application-id='com.usebottles.bottles.desktop'
+
+[org/gnome/desktop/notifications/application/firefox-esr]
+application-id='firefox-esr.desktop'
+
+[org/gnome/desktop/notifications/application/gnome-initial-setup]
+application-id='gnome-initial-setup.desktop'
+
+[org/gnome/desktop/notifications/application/gnome-power-panel]
+application-id='gnome-power-panel.desktop'
+
+[org/gnome/desktop/notifications/application/google-chrome]
+application-id='google-chrome.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-evolution-alarm-notify]
+application-id='org.gnome.Evolution-alarm-notify.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-fileroller]
+application-id='org.gnome.FileRoller.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-geary]
+application-id='org.gnome.Geary.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-nautilus]
+application-id='org.gnome.Nautilus.desktop'
+
+[org/gnome/desktop/notifications/application/org-gnome-software]
+application-id='org.gnome.Software.desktop'
+
+[org/gnome/desktop/notifications/application/steam]
+application-id='steam.desktop'
+
+[org/gnome/desktop/privacy]
+report-technical-problems=true
+
+[org/gnome/desktop/session]
+idle-delay=uint32 300
+
+[org/gnome/desktop/wm/preferences]
+button-layout='close,minimize,maximize:appmenu'
+titlebar-font='Liberation Sans Bold 12'
+
+[org/gnome/evolution/calendar]
+week-start-day-name='monday'
+work-day-friday=true
+work-day-monday=true
+work-day-saturday=false
+work-day-sunday=false
+work-day-thursday=true
+work-day-tuesday=true
+work-day-wednesday=true
+
+[org/gnome/evolution/mail]
+browser-close-on-reply-policy='ask'
+forward-style-name='attached'
+image-loading-policy='never'
+paned-size=1543209
+reply-style-name='quoted'
+to-do-bar-width=1150000
+
+[org/gnome/evolution/shell]
+folder-bar-width=257
+
+[org/gnome/evolution/shell/window]
+height=964
+maximized=false
+width=2018
+x=45
+y=29
+
+[org/gnome/file-roller/dialogs/extract]
+recreate-folders=true
+skip-newer=false
+
+[org/gnome/file-roller/listing]
+list-mode='as-folder'
+name-column-width=371
+show-path=false
+sort-method='name'
+sort-type='ascending'
+
+[org/gnome/file-roller/ui]
+sidebar-width=200
+window-height=391
+window-width=795
+
+[org/gnome/gnome-system-monitor]
+cpu-smooth-graph=true
+current-tab='resources'
+graph-update-interval=250
+maximized=true
+network-total-in-bits=false
+show-dependencies=false
+show-whose-processes='user'
+window-state=(2560, 1412, 0, 0)
+
+[org/gnome/gnome-system-monitor/disktreenew]
+col-6-visible=true
+col-6-width=0
+
+[org/gnome/gnome-system-monitor/proctree]
+col-0-visible=true
+col-0-width=229
+col-14-visible=true
+col-14-width=749
+col-15-visible=true
+col-15-width=99
+col-3-visible=false
+col-3-width=90
+col-4-visible=true
+col-6-visible=false
+col-6-width=90
+columns-order=[0, 1, 2, 3, 4, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+sort-col=15
+sort-order=0
+
+[org/gnome/maps]
+last-viewed-location=[42.319929922244114, -71.366364618064011]
+map-type='MapsStreetSource'
+transportation-type='pedestrian'
+window-maximized=true
+zoom-level=17
+
+[org/gnome/nautilus/preferences]
+default-folder-viewer='list-view'
+migrated-gtk-settings=true
+search-filter-time-type='last_modified'
+
+[org/gnome/nautilus/window-state]
+initial-size=(1100, 802)
+
+[org/gnome/settings-daemon/plugins/color]
+night-light-enabled=false
+night-light-last-coordinates=(42.282664746940071, -71.358699999999999)
+
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-ac-type='nothing'
+
+[org/gnome/shell]
+enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com', 'dash-to-dock@micxgx.gmail.com', 'trayIconsReloaded@selfmade.pl', 'openweather-extension@jenslody.de', 'System_Monitor@bghome.gmail.com', 'blur-my-shell@aunetx']
+favorite-apps=['org.gnome.Nautilus.desktop', 'google-chrome.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'steam.desktop', 'org.gnome.Software.desktop', 'org.gnome.Terminal.desktop', 'com.github.wwmm.easyeffects.desktop', 'code.desktop', 'com.usebottles.bottles.desktop', 'org.gnome.Settings.desktop']
+welcome-dialog-last-shown-version='43.4'
+
+[org/gnome/shell/extensions/system-monitor]
+load-meter=true
+network-meter=false
+position='right'
+storage-meter=false
+swap-meter=false
+
+[org/gnome/shell/extensions/user-theme]
+name='WhiteSur-Light'
+
+[org/gnome/shell/world-clocks]
+locations=@av []
+
+[org/gnome/system/location]
+enabled=true
+
+[org/gnome/terminal/legacy]
+theme-variant='dark'
+
+[org/gtk/gtk4/settings/file-chooser]
+date-format='regular'
+location-mode='path-bar'
+show-hidden=true
+show-size-column=true
+show-type-column=true
+sidebar-width=178
+sort-column='name'
+sort-directories-first=false
+sort-order='ascending'
+type-format='category'
+window-size=(1883, 1101)
+
+[org/gtk/settings/file-chooser]
+date-format='regular'
+location-mode='path-bar'
+show-hidden=false
+show-size-column=true
+show-type-column=true
+sidebar-width=198
+sort-column='name'
+sort-directories-first=false
+sort-order='descending'
+type-format='category'
+window-position=(652, 317)
+window-size=(1255, 790)
+
+[system/proxy]
+mode='none'
+
+[org/gnome/desktop/background]
+color-shading-type='solid'
+picture-options='zoom'
+picture-uri='file:///usr/share/backgrounds/gnome/fold-l.webp'
+picture-uri-dark='file:///usr/share/backgrounds/gnome/fold-d.webp'
+primary-color='#26a269'
+secondary-color='#000000'

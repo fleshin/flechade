@@ -1,0 +1,3 @@
+deb http://deb.debian.org/debian/ testing main contrib non-free-firmware non-free
+deb-src http://deb.debian.org/debian/ testing main contrib non-free non-free-firmware
+
