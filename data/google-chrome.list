@@ -1,3 +1,1 @@
-### THIS FILE IS AUTOMATICALLY CONFIGURED ###
-# You may comment out this entry, but any other modifications may be lost.
-deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main
+deb [arch=amd64 signed-by=/etc/apt/keyrings/linux_signing_key.pub.gpg] https://dl.google.com/linux/chrome/deb/ stable main
