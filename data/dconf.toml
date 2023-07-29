@@ -5,10 +5,6 @@ window-width=1094
 window-x=79
 window-y=65
 
-[org/gnome/Geary]
-images-trusted-domains=['insideapple.apple.com', 'amazon.com']
-migrated-config=true
-
 [org/gnome/baobab/ui]
 is-maximized=false
 window-size=(960, 600)
@@ -182,7 +178,6 @@ sort-col=15
 sort-order=0
 
 [org/gnome/maps]
-last-viewed-location=[42.319929922244114, -71.366364618064011]
 map-type='MapsStreetSource'
 transportation-type='pedestrian'
 window-maximized=true
@@ -198,7 +193,7 @@ initial-size=(1100, 802)
 
 [org/gnome/settings-daemon/plugins/color]
 night-light-enabled=false
-night-light-last-coordinates=(42.282664746940071, -71.358699999999999)
+
 
 [org/gnome/settings-daemon/plugins/power]
 sleep-inactive-ac-type='nothing'
