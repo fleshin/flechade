@@ -40,6 +40,8 @@ func main() {
 		set.AddStep("Adding MS public keys", run.AddRepoKey, "https://packages.microsoft.com/keys/microsoft.asc", "/etc/apt/keyrings/packages.microsoft.asc")
 		set.AddStep("Updating package repositories", run.UpdateRepos)
 		set.AddStep("Upgrading packages", run.UpgradePackages)
+		set.AddStep("Creating pipewire directory", run.CreateDir, "/etc/pipewire")
+		set.AddStep("Enabling HiFi audio", run.CopyFile, "pipewire.conf", "/etc/pipewire")
 	}
 	set.Run()
 	fmt.Println("Setup complete. Enjoy!")

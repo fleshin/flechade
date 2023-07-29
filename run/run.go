@@ -336,7 +336,7 @@ func (ds *Set) execAddRepoKey(URL string, file string) (string, error) {
 	if err != nil {
 		return string(out), err
 	}
-	args = []string{"--dearmor", file}
+	args = []string{"--batch", "--yes", "--dearmor", file}
 	Cmd = exec.Command("gpg", args...)
 	out, err = Cmd.Output()
 
