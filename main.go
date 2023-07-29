@@ -44,6 +44,10 @@ func main() {
 
 		set.AddStep("Enabling Flatpaks", run.EnableFlatpak)
 
+		set.AddStep("Installing system tools", run.InstallPackages, "zsh nala lsd fonts-font-awesome neofetch mc tmux curl plocate libvirt-clients virt-manager sassc libglib2.0-dev-bin")
+		set.AddStep("Installing basic development env", run.InstallPackages, "git build-essential golang libgl1-mesa-dev xorg-dev")
+		set.AddStep("Enabling apt-file", run.EnableAptFile)
+
 		set.AddStep("Creating pipewire directory", run.CreateDir, "/etc/pipewire")
 		set.AddStep("Enabling HiFi audio", run.CopyFile, "pipewire.conf", "/etc/pipewire")
 	}

@@ -47,6 +47,7 @@ const (
 	UpgradePackages
 	AddArch
 	EnableFlatpak
+	EnableAptFile
 
 	//Services
 	ReloadUnits
@@ -290,6 +291,16 @@ func (ds *Set) execInstallPackages(pkgs string) (string, error) {
 	return string(out), err
 }
 
+func (ds *Set) execEnableAptFile() (string, error) {
+	out, err := ds.execInstallPackages("apt-file")
+	if err != nil {
+		return out, err
+	}
+	Cmd := exec.Command("apt-file", "update")
+	output, err := Cmd.Output()
+	return string(output), err
+}
+
 func (ds *Set) execEnableFlatpak() (string, error) {
 	//Installing flatpak and plugin for software manager
 	out, err := ds.execInstallPackages("flatpak gnome-software-plugin-flatpak")
@@ -495,6 +506,8 @@ func (ds *Set) Run() {
 			out, err = ds.execAddArch(step.Params[0])
 		case EnableFlatpak:
 			out, err = ds.execEnableFlatpak()
+		case EnableAptFile:
+			out, err = ds.execEnableAptFile()
 		}
 		if err != nil {
 			step.Status.ErrLvl = 1
