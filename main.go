@@ -48,8 +48,13 @@ func main() {
 		set.AddStep("Installing basic development env", run.InstallPackages, "git build-essential golang libgl1-mesa-dev xorg-dev")
 		set.AddStep("Enabling apt-file", run.EnableAptFile)
 
+		set.AddStep("Installing Google Chrome", run.InstallPackages, "google-chrome-stable")
+		set.AddStep("Installing VS Code", run.InstallPackages, "code")
+		set.AddStep("Installing Steam", run.InstallPackages, "mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386 steam-installer")
+
 		set.AddStep("Creating pipewire directory", run.CreateDir, "/etc/pipewire")
 		set.AddStep("Enabling HiFi audio", run.CopyFile, "pipewire.conf", "/etc/pipewire")
+
 	}
 	set.Run()
 	fmt.Println("Setup complete. Enjoy!")
