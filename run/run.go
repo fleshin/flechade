@@ -43,8 +43,10 @@ const (
 	// Packages
 	AddRepoKey
 	UpdateRepos
-	InstallPackage
+	InstallPackages
 	UpgradePackages
+	AddArch
+	EnableFlatpak
 
 	//Services
 	ReloadUnits
@@ -73,11 +75,13 @@ type step struct {
 }
 
 type Set struct {
-	Version    string
-	OSrel      string
-	configFile string
-	files      embed.FS
-	Steps      []step
+	Version     string
+	OSrel       string
+	configFile  string
+	files       embed.FS
+	Steps       []step
+	name        string
+	description string
 }
 
 func NewSet() *Set {
@@ -255,6 +259,16 @@ func (ds *Set) execUpgradePackages() (string, error) {
 	return string(out), err
 }
 
+func (ds *Set) execAddArch(arch string) (string, error) {
+	args := []string{"--add-architecture", arch}
+	Cmd := exec.Command("dpkg", args...)
+	Cmd.Env = os.Environ()
+	Cmd.Env = append(Cmd.Env, "DEBCONF_NONINTERACTIVE_SEEN=true")
+	Cmd.Env = append(Cmd.Env, "DEBIAN_FRONTEND=noninteractive")
+	out, err := Cmd.Output()
+	return string(out), err
+}
+
 func (ds *Set) execReloadUnits() (string, error) {
 	args := []string{"daemon-reload"}
 	Cmd := exec.Command("systemctl", args...)
@@ -262,11 +276,45 @@ func (ds *Set) execReloadUnits() (string, error) {
 	return string(out), err
 }
 
-func (ds *Set) execInstallPackage(pkg string) (string, error) {
-	args := []string{"install", pkg, "-y"}
+func (ds *Set) execInstallPackages(pkgs string) (string, error) {
+	args := []string{"install", "-y", "-o", "Dpkg::Options::=--force-confnew"}
+	plist := strings.Split(pkgs, " ")
+	args = append(args, plist...)
 	Cmd := exec.Command("apt", args...)
+	Cmd.Env = os.Environ()
+	Cmd.Env = append(Cmd.Env, "DEBCONF_NONINTERACTIVE_SEEN=true")
+	Cmd.Env = append(Cmd.Env, "APT_LISTCHANGES_FRONTEND=none")
+	Cmd.Env = append(Cmd.Env, "NEEDRESTART_MODE=a")
+	Cmd.Env = append(Cmd.Env, "DEBIAN_FRONTEND=noninteractive")
 	out, err := Cmd.Output()
 	return string(out), err
+}
+
+func (ds *Set) execEnableFlatpak() (string, error) {
+	//Installing flatpak and plugin for software manager
+	out, err := ds.execInstallPackages("flatpak gnome-software-plugin-flatpak")
+	if err != nil {
+		return out, err
+	}
+	//Adding flathub repo
+	args := []string{"remote-add", "--if-not-exists", "flathub", "https://flathub.org/repo/flathub.flatpakrepo"}
+	Cmd := exec.Command("flatpak", args...)
+	output, err := Cmd.Output()
+	if err != nil {
+		return string(output), err
+	}
+	//Pulling available packages
+	args = []string{"update", "--noninteractive", "--assumeyes"}
+	Cmd = exec.Command("flatpak", args...)
+	output, err = Cmd.Output()
+	if err != nil {
+		return string(output), err
+	}
+	//Prividing access to themes
+	args = []string{"override", "--filesystem=~/.themes", "--filesystem=~/.icons", "--filesystem=xdg-config/gtk-4.0"}
+	Cmd = exec.Command("flatpak", args...)
+	output, err = Cmd.Output()
+	return string(output), err
 }
 
 func (ds *Set) execEnableService(svc string) (string, error) {
@@ -419,8 +467,8 @@ func (ds *Set) Run() {
 			out, err = ds.execUpdateRepos()
 		case UpgradePackages:
 			out, err = ds.execUpgradePackages()
-		case InstallPackage:
-			out, err = ds.execInstallPackage(step.Params[0])
+		case InstallPackages:
+			out, err = ds.execInstallPackages(step.Params[0])
 		case EnableService:
 			out, err = ds.execEnableService(step.Params[0])
 		case UnzipFile:
@@ -443,6 +491,10 @@ func (ds *Set) Run() {
 			out, err = ds.execReloadUnits()
 		case AddRepoKey:
 			out, err = ds.execAddRepoKey(step.Params[0], step.Params[1])
+		case AddArch:
+			out, err = ds.execAddArch(step.Params[0])
+		case EnableFlatpak:
+			out, err = ds.execEnableFlatpak()
 		}
 		if err != nil {
 			step.Status.ErrLvl = 1

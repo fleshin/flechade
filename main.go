@@ -38,8 +38,12 @@ func main() {
 		set.AddStep("Adding Google public keys", run.AddRepoKey, "https://dl.google.com/linux/linux_signing_key.pub", "/etc/apt/keyrings/linux_signing_key.pub")
 		set.AddStep("MS VSCode repo sources", run.CopyFile, "vscode.list", "/etc/apt/sources.list.d/")
 		set.AddStep("Adding MS public keys", run.AddRepoKey, "https://packages.microsoft.com/keys/microsoft.asc", "/etc/apt/keyrings/packages.microsoft.asc")
+		set.AddStep("Enabling 32bit packages", run.AddArch, "i386")
 		set.AddStep("Updating package repositories", run.UpdateRepos)
 		set.AddStep("Upgrading packages", run.UpgradePackages)
+
+		set.AddStep("Enabling Flatpaks", run.EnableFlatpak)
+
 		set.AddStep("Creating pipewire directory", run.CreateDir, "/etc/pipewire")
 		set.AddStep("Enabling HiFi audio", run.CopyFile, "pipewire.conf", "/etc/pipewire")
 	}
