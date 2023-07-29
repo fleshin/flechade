@@ -18,6 +18,7 @@ import (
 
 type cmd int
 
+/* Operation IDs */
 const (
 	//Basic file ops
 	CreateDir cmd = iota
@@ -231,24 +232,25 @@ func (ds *Set) execReloadSysctl() (string, error) {
 }
 
 func (ds *Set) execUpdateRepos() (string, error) {
-	args := []string{"update", "-y", "-o", "Dpkg::Options::=\"--force-confdef\""}
+	args := []string{"update", "-y", "-o", "Dpkg::Options::=--force-confdef"}
 	Cmd := exec.Command("apt", args...)
 	Cmd.Env = os.Environ()
 	Cmd.Env = append(Cmd.Env, "DEBIAN_FRONTEND=noninteractive")
+	Cmd.Env = append(Cmd.Env, "DEBCONF_NONINTERACTIVE_SEEN=true")
+	Cmd.Env = append(Cmd.Env, "APT_LISTCHANGES_FRONTEND=none")
+	Cmd.Env = append(Cmd.Env, "NEEDRESTART_MODE=a")
 	out, err := Cmd.Output()
 	return string(out), err
 }
 
 func (ds *Set) execUpgradePackages() (string, error) {
-	args := []string{"upgrade", "-y", "-fuy", "--force-yes", "-o", "Dpkg::Options::='--force-confnew'", "-o", "Dpkg::Options::='--force-confdef'", "-o", "quiet=2"}
-	//args := []string{"upgrade", "-y", "Dpkg::Options::='--force-confnew'"}
+	args := []string{"upgrade", "-y", "-o", "Dpkg::Options::=--force-confnew"}
 	Cmd := exec.Command("apt", args...)
 	Cmd.Env = os.Environ()
-	Cmd.Env = append(Cmd.Env, "DEBIAN_FRONTEND=noninteractive")
-	//Cmd.Env = append(Cmd.Env, "DEBCONF_NONINTERACTIVE_SEEN=true")
+	Cmd.Env = append(Cmd.Env, "DEBCONF_NONINTERACTIVE_SEEN=true")
 	Cmd.Env = append(Cmd.Env, "APT_LISTCHANGES_FRONTEND=none")
 	Cmd.Env = append(Cmd.Env, "NEEDRESTART_MODE=a")
-
+	Cmd.Env = append(Cmd.Env, "DEBIAN_FRONTEND=noninteractive")
 	out, err := Cmd.Output()
 	return string(out), err
 }
