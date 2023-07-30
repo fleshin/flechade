@@ -83,6 +83,7 @@ type Set struct {
 	Steps       []step
 	name        string
 	description string
+	user        string
 }
 
 func NewSet() *Set {
@@ -95,6 +96,12 @@ func NewSet() *Set {
 	cmd := exec.Command("lsb_release", args...)
 	out, _ := cmd.Output()
 	s.OSrel = string(out)
+	// Get non root username
+	s.user = os.Getenv("USER")
+	sudoUser, ok := os.LookupEnv("SUDO_USER")
+	if ok {
+		s.user = sudoUser
+	}
 	return &s
 }
 
@@ -191,8 +198,8 @@ func (ds *Set) execAddGroup(groupName string) (string, error) {
 	return string(out), err
 }
 
-func (ds *Set) execAssignGroups(user string, groups string) (string, error) {
-	args := []string{"-aG", groups, user}
+func (ds *Set) execAssignGroups(groups string) (string, error) {
+	args := []string{"-aG", groups, ds.user}
 	Cmd := exec.Command("usermod", args...)
 	out, err := Cmd.Output()
 	return string(out), err
@@ -471,7 +478,7 @@ func (ds *Set) Run() {
 		case ChangePerm:
 			out, err = ds.execChangePerm(step.Params[0], step.Params[1])
 		case AssignGroups:
-			out, err = ds.execAssignGroups(step.Params[0], step.Params[1])
+			out, err = ds.execAssignGroups(step.Params[0])
 		case ReloadSysctl:
 			out, err = ds.execReloadSysctl()
 		case UpdateRepos:

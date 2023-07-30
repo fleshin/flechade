@@ -44,8 +44,9 @@ func main() {
 
 		set.AddStep("Enabling Flatpaks", run.EnableFlatpak)
 
-		set.AddStep("Installing system tools", run.InstallPackages, "zsh nala lsd fonts-font-awesome neofetch mc tmux curl plocate libvirt-clients virt-manager sassc libglib2.0-dev-bin")
-		set.AddStep("Installing basic development env", run.InstallPackages, "git build-essential golang libgl1-mesa-dev xorg-dev")
+		set.AddStep("Installing system tools", run.InstallPackages, "zsh nala lsd fonts-font-awesome neofetch mc tmux curl plocate libvirt-clients virt-manager sassc")
+		set.AddStep("Making user member of virt groups", run.AssignGroups, "kvm,libvirt")
+		set.AddStep("Installing basic development env", run.InstallPackages, "git build-essential golang libgl1-mesa-dev xorg-dev libglib2.0-dev-bin")
 		set.AddStep("Enabling apt-file", run.EnableAptFile)
 
 		set.AddStep("Installing Google Chrome", run.InstallPackages, "google-chrome-stable")
