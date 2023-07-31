@@ -49,6 +49,8 @@ func main() {
 		set.AddStep("Installing basic development env", run.InstallPackages, "git build-essential golang libgl1-mesa-dev xorg-dev libglib2.0-dev-bin")
 		set.AddStep("Enabling apt-file", run.EnableAptFile)
 
+		set.AddStep("Installing Flatpak apps", run.InstallFlatpaks, "com.github.tchx84.Flatseal com.usebottles.bottles com.github.wwmm.easyeffects net.davidotek.pupgui2 com.slack.Slack org.gnome.Geary")
+
 		set.AddStep("Installing Google Chrome", run.InstallPackages, "google-chrome-stable")
 		set.AddStep("Installing VS Code", run.InstallPackages, "code")
 		set.AddStep("Installing Steam", run.InstallPackages, "mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386 steam-installer")

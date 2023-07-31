@@ -44,6 +44,7 @@ const (
 	AddRepoKey
 	UpdateRepos
 	InstallPackages
+	InstallFlatpaks
 	UpgradePackages
 	AddArch
 	EnableFlatpak
@@ -298,6 +299,15 @@ func (ds *Set) execInstallPackages(pkgs string) (string, error) {
 	return string(out), err
 }
 
+func (ds *Set) execInstallFlatpaks(pkgs string) (string, error) {
+	args := []string{"install", "--noninteractive", "--assumeyes", "-v", "flathub"}
+	plist := strings.Split(pkgs, " ")
+	args = append(args, plist...)
+	Cmd := exec.Command("flatpak", args...)
+	out, err := Cmd.Output()
+	return string(out), err
+}
+
 func (ds *Set) execEnableAptFile() (string, error) {
 	out, err := ds.execInstallPackages("apt-file")
 	if err != nil {
@@ -515,6 +525,8 @@ func (ds *Set) Run() {
 			out, err = ds.execEnableFlatpak()
 		case EnableAptFile:
 			out, err = ds.execEnableAptFile()
+		case InstallFlatpaks:
+			out, err = ds.execInstallFlatpaks(step.Params[0])
 		}
 		if err != nil {
 			step.Status.ErrLvl = 1
