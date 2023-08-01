@@ -33,7 +33,7 @@ func main() {
 	set.SetFiles(configFS)
 	if err := set.Load(); err != nil {
 		// Adding repositories
-		set.AddStep("Installing Debian Testing repo sources", run.CopyFile, "sources.list", "/etc/apt")
+		set.AddStep("Installing Debian Testing sources", run.CopyFile, "sources.list", "/etc/apt")
 		set.AddStep("Google Chrome repo sources", run.CopyFile, "google-chrome.list", "/etc/apt/sources.list.d/")
 		set.AddStep("Adding Google public keys", run.AddRepoKey, "https://dl.google.com/linux/linux_signing_key.pub", "/etc/apt/keyrings/linux_signing_key.pub")
 		set.AddStep("MS VSCode repo sources", run.CopyFile, "vscode.list", "/etc/apt/sources.list.d/")
@@ -54,6 +54,8 @@ func main() {
 		set.AddStep("Installing Google Chrome", run.InstallPackages, "google-chrome-stable")
 		set.AddStep("Installing VS Code", run.InstallPackages, "code")
 		set.AddStep("Installing Steam", run.InstallPackages, "mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386 steam-installer")
+
+		set.AddStep("Installing Nerd fonts", run.CloneAndRun, "https://github.com/ryanoasis/nerd-fonts.git", "install.sh --install-to-system-path")
 
 		set.AddStep("Creating pipewire directory", run.CreateDir, "/etc/pipewire")
 		set.AddStep("Enabling HiFi audio", run.CopyFile, "pipewire.conf", "/etc/pipewire")

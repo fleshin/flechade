@@ -57,6 +57,7 @@ const (
 
 	// GIT
 	CloneRepo
+	CloneAndRun
 
 	// Ops
 	Run
@@ -380,14 +381,31 @@ func (ds *Set) execAddUser(name string) (string, error) {
 	return string(out), err
 }
 
-func (ds *Set) execCloneRepo(user string, repo string, dir string) (string, error) {
-	//os.Setenv("GIT_SSL_NO_VERIFY", "true")
-	args := []string{"-u", user, "git", "clone", repo, dir}
-	Cmd := exec.Command("sudo", args...)
+func (ds *Set) execCloneRepo(repo string, dir string) (string, error) {
+	args := []string{"clone", "--depth", "1", repo, dir}
+	Cmd := exec.Command("git", args...)
 	Cmd.Env = os.Environ()
 	Cmd.Env = append(Cmd.Env, "GIT_SSL_NO_VERIFY=true")
 	out, err := Cmd.Output()
 	return string(out), err
+}
+
+func (ds *Set) execCloneAndRun(repo, command string) (string, error) {
+	rlen := len(repo)
+	last := strings.LastIndex(repo, "/")
+	rname := repo[last : rlen-4]
+	clist := strings.Split(command, " ")
+	xfile := clist[0]
+	if _, err := os.Stat("/tmp/" + rname + "/" + xfile); errors.Is(err, os.ErrNotExist) {
+		out, err := ds.execCloneRepo(repo, "/tmp/"+rname)
+		if err != nil {
+			return out, err
+		}
+	}
+	args := clist[1:]
+	Cmd := exec.Command("/tmp/"+rname+"/"+xfile, args...)
+	output, err := Cmd.Output()
+	return string(output), err
 }
 
 func (ds *Set) execRun(cmd string) (string, error) {
@@ -506,7 +524,7 @@ func (ds *Set) Run() {
 		case Untar:
 			out, err = ds.execUntar(step.Params[0], step.Params[1])
 		case CloneRepo:
-			out, err = ds.execCloneRepo(step.Params[0], step.Params[1], step.Params[2])
+			out, err = ds.execCloneRepo(step.Params[0], step.Params[1])
 		case AddUser:
 			out, err = ds.execAddUser(step.Params[0])
 		case SetPass:
@@ -527,6 +545,8 @@ func (ds *Set) Run() {
 			out, err = ds.execEnableAptFile()
 		case InstallFlatpaks:
 			out, err = ds.execInstallFlatpaks(step.Params[0])
+		case CloneAndRun:
+			out, err = ds.execCloneAndRun(step.Params[0], step.Params[1])
 		}
 		if err != nil {
 			step.Status.ErrLvl = 1
