@@ -50,6 +50,11 @@ const (
 	EnableFlatpak
 	EnableAptFile
 
+	//Gnome
+	InstallGnomeExt
+	EnableGnomeExt
+	InstallGnomeSettings
+
 	//Services
 	ReloadUnits
 	ReloadSysctl
@@ -86,6 +91,7 @@ type Set struct {
 	name        string
 	description string
 	user        string
+	uid         string
 }
 
 func NewSet() *Set {
@@ -103,6 +109,11 @@ func NewSet() *Set {
 	sudoUser, ok := os.LookupEnv("SUDO_USER")
 	if ok {
 		s.user = sudoUser
+	}
+	s.uid = os.Getenv("UID")
+	sudoUid, ok := os.LookupEnv("SUDO_UID")
+	if ok {
+		s.uid = sudoUid
 	}
 	return &s
 }
@@ -408,6 +419,57 @@ func (ds *Set) execCloneAndRun(repo, command string) (string, error) {
 	return string(output), err
 }
 
+func (ds *Set) execInstallGnomeExt(extid, version string) (string, error) {
+	//last := strings.LastIndex(url, "/")
+	//file := url[last:]
+
+	file := strings.ReplaceAll(extid, "@", "")
+	url := "https://extensions.gnome.org/extension-data/" + file + ".v" + version + ".shell-extension.zip"
+
+	out, err := ds.execDownload(url, "/tmp/"+file)
+	if err != nil {
+		return out, err
+	}
+	Cmd := exec.Command("gnome-extensions", "install", "--force", "/tmp/"+file)
+	output, err := Cmd.CombinedOutput()
+	if err != nil {
+		return string(output), err
+	}
+	//Activating the extension in session
+	Cmd = exec.Command("su", "-", ds.user, "-c",
+		"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/"+ds.uid+"/bus busctl --user call org.gnome.Shell.Extensions /org/gnome/Shell/Extensions org.gnome.Shell.Extensions InstallRemoteExtension s "+extid)
+	output, err = Cmd.CombinedOutput()
+	time.Sleep(5 * time.Second)
+	if err.Error() == "exit status 1" {
+		//ignore disconnect
+		var e error
+		return "", e
+	}
+	return string(output), err
+}
+
+func (ds *Set) execEnableGnomeExt(ext string) (string, error) {
+	Cmd := exec.Command("gnome-extensions", "enable", ext)
+	output, err := Cmd.CombinedOutput()
+	return string(output), err
+}
+
+func (ds *Set) execInstallGnomeSettings(cfg string) (string, error) {
+	cfgFile, err := ds.files.Open("data/" + cfg)
+	if err != nil {
+		return "", err
+	}
+	Cmd := exec.Command("dconf", "load", "/")
+	stdin, err := Cmd.StdinPipe()
+	var buf []byte
+	cfgFile.Read(buf)
+	io.WriteString(stdin, string(buf))
+	stdin.Close()
+	//Cmd.Stdin = cfgFile
+	output, err := Cmd.CombinedOutput()
+	return string(output), err
+}
+
 func (ds *Set) execRun(cmd string) (string, error) {
 	args := []string{}
 	Cmd := exec.Command(cmd, args...)
@@ -547,6 +609,12 @@ func (ds *Set) Run() {
 			out, err = ds.execInstallFlatpaks(step.Params[0])
 		case CloneAndRun:
 			out, err = ds.execCloneAndRun(step.Params[0], step.Params[1])
+		case InstallGnomeExt:
+			out, err = ds.execInstallGnomeExt(step.Params[0], step.Params[1])
+		case EnableGnomeExt:
+			out, err = ds.execEnableGnomeExt(step.Params[0])
+		case InstallGnomeSettings:
+			out, err = ds.execInstallGnomeSettings(step.Params[0])
 		}
 		if err != nil {
 			step.Status.ErrLvl = 1
