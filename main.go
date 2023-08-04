@@ -44,7 +44,7 @@ func main() {
 
 		set.AddStep("Enabling Flatpaks", run.EnableFlatpak)
 
-		set.AddStep("Installing system tools", run.InstallPackages, "zsh nala lsd fonts-font-awesome neofetch mc tmux curl plocate libvirt-clients virt-manager sassc")
+		set.AddStep("Installing system tools", run.InstallPackages, "zsh nala lsd fonts-font-awesome neofetch mc tmux curl plocate libvirt-clients virt-manager sassc dbus-x11")
 		set.AddStep("Making user member of virt groups", run.AssignGroups, "kvm,libvirt")
 		set.AddStep("Installing basic development env", run.InstallPackages, "git build-essential golang libgl1-mesa-dev xorg-dev libglib2.0-dev-bin")
 		set.AddStep("Enabling apt-file", run.EnableAptFile)
@@ -56,6 +56,18 @@ func main() {
 		set.AddStep("Installing Steam", run.InstallPackages, "mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386 steam-installer")
 
 		set.AddStep("Installing Nerd fonts", run.CloneAndRun, "https://github.com/ryanoasis/nerd-fonts.git", "install.sh --install-to-system-path")
+
+		set.AddStep("Installing Gnome Extension Dash to Dock", run.InstallGnomeExt, "dash-to-dock@micxgx.gmail.com", "84")
+		set.AddStep("Installing Gnome Extension OpenWheater", run.InstallGnomeExt, "openweather-extension@jenslody.de", "121")
+		set.AddStep("Installing Gnome Extension Tray Icons", run.InstallGnomeExt, "trayIconsReloaded@selfmade.pl", "26")
+		set.AddStep("Installing Gnome Extension Blur My Shell", run.InstallGnomeExt, "blur-my-shell@aunetx", "47")
+
+		set.AddStep("Enabling Gnome Extension User Themes", run.EnableGnomeExt, "user-theme@gnome-shell-extensions.gcampax.github.com")
+
+		set.AddStep("Installing WhiteSur Gnome theme", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "install.sh -l -c Light -N mojave")
+		set.AddStep("Installing WhiteSur Gnome tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -g -F -d")
+
+		set.AddStep("Loading Gnome Settings", run.InstallGnomeSettings, "dconf.toml")
 
 		set.AddStep("Creating pipewire directory", run.CreateDir, "/etc/pipewire")
 		set.AddStep("Enabling HiFi audio", run.CopyFile, "pipewire.conf", "/etc/pipewire")

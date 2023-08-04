@@ -17,7 +17,8 @@ IMHO, RedHat is has a record of messing up things and I think .deb is far more p
 On a freshly installed debian 12 or testing, open a terminal and run this command:
 
 ```
-usermod -a -G sudo $USER; newgrp sudo; curl .... | 
+su - root -c "usermod -aG sudo $USER"; newgrp sudo; 
+curl .... ;sudo ./flechade
 ```
 
 ## TODO
