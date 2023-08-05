@@ -63,6 +63,7 @@ const (
 	// GIT
 	CloneRepo
 	CloneAndRun
+	CloneAndRunAsUser
 
 	// Ops
 	Run
@@ -419,6 +420,33 @@ func (ds *Set) execCloneAndRun(repo, command string) (string, error) {
 	return string(output), err
 }
 
+func (ds *Set) execCloneAndRunAsUser(repo, command string) (string, error) {
+	rlen := len(repo)
+	last := strings.LastIndex(repo, "/")
+	rname := repo[last:rlen-4] + ".usr"
+	clist := strings.Split(command, " ")
+	xfile := clist[0]
+	if _, err := os.Stat("/tmp/" + rname + "/" + xfile); errors.Is(err, os.ErrNotExist) {
+		out, err := ds.execCloneRepo(repo, "/tmp/"+rname)
+		if err != nil {
+			return out, err
+		}
+	}
+	chownArgs := []string{"-R", ds.user, "/tmp/" + rname}
+	chownCmd := exec.Command("chown", chownArgs...)
+	chownout, err := chownCmd.CombinedOutput()
+	if err != nil {
+		return string(chownout), err
+	}
+	args := clist[1:]
+	concParms := strings.Join(args, " ")
+	concCmd := "/tmp/" + rname + "/" + xfile + " " + concParms
+	flags := append([]string{ds.user, "-c"}, concCmd)
+	Cmd := exec.Command("su", flags...)
+	output, err := Cmd.Output()
+	return string(output), err
+}
+
 func (ds *Set) execInstallGnomeExt(extid, version string) (string, error) {
 	//last := strings.LastIndex(url, "/")
 	//file := url[last:]
@@ -608,6 +636,8 @@ func (ds *Set) Run() {
 			out, err = ds.execInstallFlatpaks(step.Params[0])
 		case CloneAndRun:
 			out, err = ds.execCloneAndRun(step.Params[0], step.Params[1])
+		case CloneAndRunAsUser:
+			out, err = ds.execCloneAndRunAsUser(step.Params[0], step.Params[1])
 		case InstallGnomeExt:
 			out, err = ds.execInstallGnomeExt(step.Params[0], step.Params[1])
 		case EnableGnomeExt:

@@ -64,8 +64,13 @@ func main() {
 
 		set.AddStep("Enabling Gnome Extension User Themes", run.EnableGnomeExt, "user-theme@gnome-shell-extensions.gcampax.github.com")
 
-		set.AddStep("Installing WhiteSur Gnome theme", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "install.sh -l -c Light -N mojave")
-		set.AddStep("Installing WhiteSur Gnome tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -g -F -d")
+		//set.AddStep("Installing WhiteSur Gnome theme", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "install.sh -l -c Light")
+		set.AddStep("Installing WhiteSur Gnome theme", run.CloneAndRunAsUser, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "install.sh -l -c Light")
+		set.AddStep("Installing WhiteSur Nautilus theme", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "install.sh -N mojave")
+		set.AddStep("Installing WhiteSur GDM tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -g")
+		set.AddStep("Installing WhiteSur Flatpak tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -F")
+		set.AddStep("Installing WhiteSur Dock tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -d")
+		set.AddStep("Installing WhiteSur Icons", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-icon-theme.git", "install.sh -a -b")
 
 		set.AddStep("Loading Gnome Settings", run.InstallGnomeSettings, "dconf.toml")
 
