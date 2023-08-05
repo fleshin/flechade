@@ -462,11 +462,9 @@ func (ds *Set) execInstallGnomeSettings(cfg string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	Cmd := exec.Command("dconf", "load", "/")
-	stdin, _ := Cmd.StdinPipe()
-	io.Copy(stdin, cfgFile)
-	stdin.Close()
-	//Cmd.Stdin = cfgFile
+	Cmd := exec.Command("su", ds.user, "-c", "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/"+ds.uid+"/bus dconf load /")
+	buf, _ := io.ReadAll(cfgFile)
+	Cmd.Stdin = strings.NewReader(string(buf))
 	output, err := Cmd.CombinedOutput()
 	return string(output), err
 }
