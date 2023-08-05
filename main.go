@@ -69,13 +69,14 @@ func main() {
 		set.AddStep("Installing WhiteSur Nautilus theme", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "install.sh -N mojave")
 		set.AddStep("Installing WhiteSur GDM tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -g")
 		set.AddStep("Installing WhiteSur Flatpak tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -F")
-		set.AddStep("Installing WhiteSur Dock tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -d")
 		set.AddStep("Installing WhiteSur Icons", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-icon-theme.git", "install.sh -a -b")
+		set.AddStep("Installing Grub Theme", run.CloneAndRun, "https://github.com/vinceliuice/grub2-themes.git", "install.sh -t whitesur")
 
 		set.AddStep("Loading Gnome Settings", run.InstallGnomeSettings, "dconf.toml")
 
 		set.AddStep("Creating pipewire directory", run.CreateDir, "/etc/pipewire")
 		set.AddStep("Enabling HiFi audio", run.CopyFile, "pipewire.conf", "/etc/pipewire")
+		set.AddStep("Installing WhiteSur Dock tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -d")
 
 	}
 	set.Run()
