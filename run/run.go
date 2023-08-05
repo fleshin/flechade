@@ -438,18 +438,21 @@ func (ds *Set) execInstallGnomeExt(extid, version string) (string, error) {
 	//Activating the extension in session
 	Cmd = exec.Command("su", "-", ds.user, "-c",
 		"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/"+ds.uid+"/bus busctl --user call org.gnome.Shell.Extensions /org/gnome/Shell/Extensions org.gnome.Shell.Extensions InstallRemoteExtension s "+extid)
+	time.Sleep(2 * time.Second)
 	output, err = Cmd.CombinedOutput()
-	time.Sleep(5 * time.Second)
-	if err.Error() == "exit status 1" {
-		//ignore disconnect
-		var e error
-		return "", e
+	time.Sleep(2 * time.Second)
+	if err != nil {
+		if err.Error() == "exit status 1" {
+			//ignore disconnect
+			var e error
+			return "", e
+		}
 	}
 	return string(output), err
 }
 
 func (ds *Set) execEnableGnomeExt(ext string) (string, error) {
-	Cmd := exec.Command("gnome-extensions", "enable", ext)
+	Cmd := exec.Command("su", ds.user, "-c", "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/"+ds.uid+"/bus gnome-extensions enable "+ext)
 	output, err := Cmd.CombinedOutput()
 	return string(output), err
 }
@@ -460,10 +463,8 @@ func (ds *Set) execInstallGnomeSettings(cfg string) (string, error) {
 		return "", err
 	}
 	Cmd := exec.Command("dconf", "load", "/")
-	stdin, err := Cmd.StdinPipe()
-	var buf []byte
-	cfgFile.Read(buf)
-	io.WriteString(stdin, string(buf))
+	stdin, _ := Cmd.StdinPipe()
+	io.Copy(stdin, cfgFile)
 	stdin.Close()
 	//Cmd.Stdin = cfgFile
 	output, err := Cmd.CombinedOutput()
