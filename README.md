@@ -13,15 +13,33 @@ I know most ditros are just that, a tuned version of a "core" distro, so I would
 
 IMHO, RedHat is has a record of messing up things and I think .deb is far more popular than rpm. Arch is ideal for customization, but might be to much of a moving target to build on top of. So, Debian stable is great for stability but might get on the oudated side, while debian testing would be my sweet spot regarding stability/freshness (feel free to disagree on that, this is just my personal preference)
 
+## Build
+```
+go install github.com/fleshin/flechade@latest
+```
+
 ## Run
 On a freshly installed debian 12 or testing, open a terminal and run this command:
 
 ```
 su - root -c "usermod -aG sudo $USER"; newgrp sudo; 
-curl .... ;sudo ./flechade
+sudo flechade
 ```
 
 ## TODO
 Implement a single file customization package (yaml?) to be processed by the executable
 
 ## Examples of default customization
+
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss1.png"/> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss2.png"/> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss3.png"/> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss4.png"/> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss5.png"/> </p>
+
+
