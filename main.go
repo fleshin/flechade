@@ -64,7 +64,6 @@ func main() {
 
 		set.AddStep("Enabling Gnome Extension User Themes", run.EnableGnomeExt, "user-theme@gnome-shell-extensions.gcampax.github.com")
 
-		//set.AddStep("Installing WhiteSur Gnome theme", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "install.sh -l -c Light")
 		set.AddStep("Installing WhiteSur Gnome theme", run.CloneAndRunAsUser, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "install.sh -l -c Light")
 		set.AddStep("Installing WhiteSur Nautilus theme", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "install.sh -N mojave")
 		set.AddStep("Installing WhiteSur GDM tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -g")
@@ -76,6 +75,13 @@ func main() {
 
 		set.AddStep("Creating pipewire directory", run.CreateDir, "/etc/pipewire")
 		set.AddStep("Enabling HiFi audio", run.CopyFile, "pipewire.conf", "/etc/pipewire")
+
+		set.AddStep("Installing Oh My Zsh", run.CloneAndRunAsUser, "https://github.com/ohmyzsh/ohmyzsh.git", "tools/install.sh --unattended")
+		set.AddStep("Enabling Zsh", run.EnableZsh)
+		set.AddStep("Installing Zsh Highlighting plugin", run.InstallZshPlugin, "https://github.com/zsh-users/zsh-syntax-highlighting.git")
+		set.AddStep("Installing Zsh Autosuggestions plugin", run.InstallZshPlugin, "https://github.com/zsh-users/zsh-autosuggestions.git")
+		set.AddStep("Installing Zsh settings", run.InstallZshConfig, ".zshrc")
+
 		set.AddStep("Installing WhiteSur Dock tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -d")
 
 	}

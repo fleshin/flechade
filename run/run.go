@@ -50,6 +50,11 @@ const (
 	EnableFlatpak
 	EnableAptFile
 
+	// Zsh
+	InstallZshPlugin
+	EnableZsh
+	InstallZshConfig
+
 	//Gnome
 	InstallGnomeExt
 	EnableGnomeExt
@@ -485,6 +490,21 @@ func (ds *Set) execEnableGnomeExt(ext string) (string, error) {
 	return string(output), err
 }
 
+func (ds *Set) execInstallZshPlugin(repo string) (string, error) {
+	rlen := len(repo)
+	last := strings.LastIndex(repo, "/")
+	rname := repo[last : rlen-4]
+	Cmd := exec.Command("su", ds.user, "-c", "git clone --depth=1 "+repo+" ~/.oh-my-zsh/custom/plugins/"+rname)
+	output, err := Cmd.CombinedOutput()
+	return string(output), err
+}
+
+func (ds *Set) execEnableZsh() (string, error) {
+	Cmd := exec.Command("usermod", "-s", "/bin/zsh", ds.user)
+	output, err := Cmd.CombinedOutput()
+	return string(output), err
+}
+
 func (ds *Set) execInstallGnomeSettings(cfg string) (string, error) {
 	cfgFile, err := ds.files.Open("data/" + cfg)
 	if err != nil {
@@ -547,6 +567,26 @@ func (ds *Set) execCopyFile(fileName string, dstDir string) (string, error) {
 	defer cfgFile.Close()
 	_, err = io.Copy(dstFile, cfgFile)
 	return "", err
+}
+
+func (ds *Set) execInstallZshConfig(fileName string) (string, error) {
+	dstName := "/home/" + ds.user + "/.zshrc"
+	dstFile, err := os.OpenFile(dstName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return "", err
+	}
+	defer dstFile.Close()
+	cfgFile, err := ds.files.Open("data/" + fileName)
+	if err != nil {
+		return "", err
+	}
+	defer cfgFile.Close()
+	_, err = io.Copy(dstFile, cfgFile)
+	if err != nil {
+		return "", err
+	}
+	out, err := ds.execChangeOwner(ds.user, dstName)
+	return out, err
 }
 
 func (ds *Set) Run() {
@@ -644,6 +684,12 @@ func (ds *Set) Run() {
 			out, err = ds.execEnableGnomeExt(step.Params[0])
 		case InstallGnomeSettings:
 			out, err = ds.execInstallGnomeSettings(step.Params[0])
+		case InstallZshPlugin:
+			out, err = ds.execInstallZshPlugin(step.Params[0])
+		case EnableZsh:
+			out, err = ds.execEnableZsh()
+		case InstallZshConfig:
+			out, err = ds.execInstallZshConfig(step.Params[0])
 		}
 		if err != nil {
 			step.Status.ErrLvl = 1
