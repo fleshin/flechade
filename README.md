@@ -31,6 +31,7 @@ Implement a single file customization package (yaml?) to be processed by the exe
 
 ## Examples of default customization
 
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss0.png"/> </p>
 
 <p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss1.png"/> </p>
 
