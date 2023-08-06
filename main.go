@@ -16,7 +16,8 @@ var configFS embed.FS
 func main() {
 
 	bi, _ := debug.ReadBuildInfo()
-	ver := bi.Settings[11].Value
+	//ver := bi.Settings[11].Value
+	ver := "v0.0.1"
 
 	fmt.Println("flechade - customize your linux")
 	fmt.Println("Version:", ver)
