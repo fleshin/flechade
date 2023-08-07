@@ -14,65 +14,69 @@ import (
 	"time"
 
 	"github.com/theckman/yacspin"
+	"golang.org/x/exp/slices"
 )
 
-type cmd int
+var Commands []string
 
-/* Operation IDs */
-const (
-	//Basic file ops
-	CreateDir cmd = iota
-	AppendFile
-	CopyFile
-	ChangeOwner
-	ChangePerm
-	Replace
-	Download
+func init() {
 
-	// Basic user ops
-	AddUser
-	AddGroup
-	SetPass
-	AssignGroups
-	PrimaryGroup
-	InstallUserConfig
+	Commands = []string{
+		//Basic file ops
+		"CreateDir",
+		"AppendFile",
+		"CopyFile",
+		"ChangeOwner",
+		"ChangePerm",
+		"Replace",
+		"Download",
 
-	// Compression
-	Untar
-	UnzipFile
+		// Basic user ops
+		"AddUser",
+		"AddGroup",
+		"SetPass",
+		"AssignGroups",
+		"PrimaryGroup",
+		"InstallUserConfig",
 
-	// Packages
-	AddRepoKey
-	UpdateRepos
-	InstallPackages
-	InstallFlatpaks
-	UpgradePackages
-	AddArch
-	EnableFlatpak
-	EnableAptFile
+		// Compression
+		"Untar",
+		"UnzipFile",
 
-	// Zsh
-	InstallZshPlugin
-	EnableZsh
+		// Packages
+		"AddRepoKey",
+		"UpdateRepos",
+		"InstallPackages",
+		"InstallFlatpaks",
+		"UpgradePackages",
+		"AddArch",
+		"EnableFlatpak",
+		"EnableAptFile",
 
-	//Gnome
-	InstallGnomeExt
-	EnableGnomeExt
-	InstallGnomeSettings
+		// Zsh
+		"InstallZshPlugin",
+		"EnableZsh",
 
-	//Services
-	ReloadUnits
-	ReloadSysctl
-	EnableService
+		//Gnome
+		"InstallGnomeExt",
+		"EnableGnomeExt",
+		"InstallGnomeSettings",
 
-	// GIT
-	CloneRepo
-	CloneAndRun
-	CloneAndRunAsUser
+		//Services
+		"ReloadUnits",
+		"ReloadSysctl",
+		"EnableService",
 
-	// Ops
-	Run
-)
+		// GIT
+		"CloneRepo",
+		"CloneAndRun",
+		"CloneAndRunAsUser",
+
+		// Ops
+		"Run",
+	}
+
+}
 
 type stepStat struct {
 	ErrLvl  int
@@ -81,7 +85,7 @@ type stepStat struct {
 
 type step struct {
 	//Id       int
-	Command  cmd
+	Command  string
 	Params   []string
 	Desc     string
 	Status   stepStat
@@ -128,10 +132,10 @@ func (ds *Set) SetFiles(fs embed.FS) {
 	ds.files = fs
 }
 
-func (ds *Set) AddStep(desc string, cmdId cmd, args ...string) error {
+func (ds *Set) AddStep(desc string, cmdId string, args ...string) error {
 	var err error
 	var stp step
-	if cmdId < CreateDir || cmdId > Run {
+	if !slices.Contains(Commands, cmdId) {
 		return errors.New("command not found")
 	}
 	stp.Params = args
@@ -620,75 +624,75 @@ func (ds *Set) Run() {
 		spinner.Start()
 
 		switch step.Command {
-		case CreateDir:
+		case "CreateDir":
 			out, err = ds.execCreateDir(step.Params[0])
-		case AppendFile:
+		case "AppendFile":
 			out, err = ds.execAppendFile(step.Params[0], step.Params[1])
-		case AddGroup:
+		case "AddGroup":
 			out, err = ds.execAddGroup(step.Params[0])
-		case Replace:
+		case "Replace":
 			out, err = ds.execReplace(step.Params[0], step.Params[1])
-		case CopyFile:
+		case "CopyFile":
 			out, err = ds.execCopyFile(step.Params[0], step.Params[1])
-		case ChangeOwner:
+		case "ChangeOwner":
 			out, err = ds.execChangeOwner(step.Params[0], step.Params[1])
-		case ChangePerm:
+		case "ChangePerm":
 			out, err = ds.execChangePerm(step.Params[0], step.Params[1])
-		case AssignGroups:
+		case "AssignGroups":
 			out, err = ds.execAssignGroups(step.Params[0])
-		case ReloadSysctl:
+		case "ReloadSysctl":
 			out, err = ds.execReloadSysctl()
-		case UpdateRepos:
+		case "UpdateRepos":
 			out, err = ds.execUpdateRepos()
-		case UpgradePackages:
+		case "UpgradePackages":
 			out, err = ds.execUpgradePackages()
-		case InstallPackages:
+		case "InstallPackages":
 			out, err = ds.execInstallPackages(step.Params[0])
-		case EnableService:
+		case "EnableService":
 			out, err = ds.execEnableService(step.Params[0])
-		case UnzipFile:
+		case "UnzipFile":
 			out, err = ds.execUnzipFile(step.Params[0], step.Params[1])
-		case Run:
+		case "Run":
 			out, err = ds.execRun(step.Params[0])
-		case Untar:
+		case "Untar":
 			out, err = ds.execUntar(step.Params[0], step.Params[1])
-		case CloneRepo:
+		case "CloneRepo":
 			out, err = ds.execCloneRepo(step.Params[0], step.Params[1])
-		case AddUser:
+		case "AddUser":
 			out, err = ds.execAddUser(step.Params[0])
-		case SetPass:
+		case "SetPass":
 			out, err = ds.execSetPass(step.Params[0], step.Params[1])
-		case Download:
+		case "Download":
 			out, err = ds.execDownload(step.Params[0], step.Params[1])
-		case PrimaryGroup:
+		case "PrimaryGroup":
 			out, err = ds.execPrimaryGroup(step.Params[0], step.Params[1])
-		case ReloadUnits:
+		case "ReloadUnits":
 			out, err = ds.execReloadUnits()
-		case AddRepoKey:
+		case "AddRepoKey":
 			out, err = ds.execAddRepoKey(step.Params[0], step.Params[1])
-		case AddArch:
+		case "AddArch":
 			out, err = ds.execAddArch(step.Params[0])
-		case EnableFlatpak:
+		case "EnableFlatpak":
 			out, err = ds.execEnableFlatpak()
-		case EnableAptFile:
+		case "EnableAptFile":
 			out, err = ds.execEnableAptFile()
-		case InstallFlatpaks:
+		case "InstallFlatpaks":
 			out, err = ds.execInstallFlatpaks(step.Params[0])
-		case CloneAndRun:
+		case "CloneAndRun":
 			out, err = ds.execCloneAndRun(step.Params[0], step.Params[1])
-		case CloneAndRunAsUser:
+		case "CloneAndRunAsUser":
 			out, err = ds.execCloneAndRunAsUser(step.Params[0], step.Params[1])
-		case InstallGnomeExt:
+		case "InstallGnomeExt":
 			out, err = ds.execInstallGnomeExt(step.Params[0], step.Params[1])
-		case EnableGnomeExt:
+		case "EnableGnomeExt":
 			out, err = ds.execEnableGnomeExt(step.Params[0])
-		case InstallGnomeSettings:
+		case "InstallGnomeSettings":
 			out, err = ds.execInstallGnomeSettings(step.Params[0])
-		case InstallZshPlugin:
+		case "InstallZshPlugin":
 			out, err = ds.execInstallZshPlugin(step.Params[0])
-		case EnableZsh:
+		case "EnableZsh":
 			out, err = ds.execEnableZsh()
-		case InstallUserConfig:
+		case "InstallUserConfig":
 			out, err = ds.execInstallUserConfig(step.Params[0])
 		}
 		if err != nil {
