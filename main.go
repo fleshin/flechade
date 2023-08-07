@@ -80,7 +80,7 @@ func main() {
 		set.AddStep("Enabling Zsh", run.EnableZsh)
 		set.AddStep("Installing Zsh Highlighting plugin", run.InstallZshPlugin, "https://github.com/zsh-users/zsh-syntax-highlighting.git")
 		set.AddStep("Installing Zsh Autosuggestions plugin", run.InstallZshPlugin, "https://github.com/zsh-users/zsh-autosuggestions.git")
-		set.AddStep("Installing Zsh settings", run.InstallZshConfig, ".zshrc")
+		set.AddStep("Installing Zsh settings", run.InstallUserConfig, ".zshrc")
 
 		set.AddStep("Installing WhiteSur Dock tweaks", run.CloneAndRun, "https://github.com/vinceliuice/WhiteSur-gtk-theme.git", "tweaks.sh -d")
 

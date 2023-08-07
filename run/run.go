@@ -35,6 +35,7 @@ const (
 	SetPass
 	AssignGroups
 	PrimaryGroup
+	InstallUserConfig
 
 	// Compression
 	Untar
@@ -53,7 +54,6 @@ const (
 	// Zsh
 	InstallZshPlugin
 	EnableZsh
-	InstallZshConfig
 
 	//Gnome
 	InstallGnomeExt
@@ -569,8 +569,8 @@ func (ds *Set) execCopyFile(fileName string, dstDir string) (string, error) {
 	return "", err
 }
 
-func (ds *Set) execInstallZshConfig(fileName string) (string, error) {
-	dstName := "/home/" + ds.user + "/.zshrc"
+func (ds *Set) execInstallUserConfig(fileName string) (string, error) {
+	dstName := "/home/" + ds.user + "/" + fileName
 	dstFile, err := os.OpenFile(dstName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return "", err
@@ -688,8 +688,8 @@ func (ds *Set) Run() {
 			out, err = ds.execInstallZshPlugin(step.Params[0])
 		case EnableZsh:
 			out, err = ds.execEnableZsh()
-		case InstallZshConfig:
-			out, err = ds.execInstallZshConfig(step.Params[0])
+		case InstallUserConfig:
+			out, err = ds.execInstallUserConfig(step.Params[0])
 		}
 		if err != nil {
 			step.Status.ErrLvl = 1
