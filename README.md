@@ -33,8 +33,19 @@ su - root -c "usermod -aG sudo $USER"; newgrp sudo;
 sudo flechade -l
 ```
 
-## TODO
-Implement a single file customization package (yaml?) to be processed by the executable
+## Usage
+Load default customization set (Golang McGamer)
+```
+sudo ./flechade -l
+```
+Load customization set from a directory
+```
+sudo ./flechade /tmp/custom-flechade
+```
+Load customization from a GIT repository
+```
+sudo ./flechade -r https://github.com/fleshin/flechade-normie
+```
 
 ## Examples of default customization
 
