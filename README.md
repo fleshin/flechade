@@ -40,7 +40,7 @@ sudo ./flechade -l
 ```
 Load customization set from a directory
 ```
-sudo ./flechade /tmp/custom-flechade
+sudo ./flechade -d /tmp/custom-flechade
 ```
 Load customization from a GIT repository
 ```
