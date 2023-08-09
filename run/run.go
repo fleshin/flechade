@@ -1,26 +1,27 @@
 package run
 
 import (
-	"embed"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"os"
 	"os/exec"
-	"runtime/debug"
 	"strings"
 	"time"
 
 	"github.com/theckman/yacspin"
 	"golang.org/x/exp/slices"
+	"gopkg.in/yaml.v3"
 )
 
 var Commands []string
+var version string
 
 func init() {
-
+	version = "0.0.2"
 	Commands = []string{
 		//Basic file ops
 		"CreateDir",
@@ -86,34 +87,39 @@ type stepStat struct {
 type step struct {
 	//Id       int
 	Command  string
-	Params   []string
+	Params   []string `yaml:"params,omitempty"`
 	Desc     string
-	Status   stepStat
-	Complete bool
+	Status   stepStat `yaml:"status,omitempty"`
+	Complete bool     `yaml:"complete,omitempty"`
 }
 
 type Set struct {
-	Version     string
-	OSrel       string
+	Ver         string
+	osRel       string
 	configFile  string
-	files       embed.FS
-	Steps       []step
-	name        string
-	description string
+	files       fs.FS
+	Name        string
+	Description string
 	user        string
 	uid         string
+	Steps       []step
 }
 
-func NewSet() *Set {
+func GetVer() string {
+	return version
+}
+
+func NewSet(name, description string) *Set {
 	var s Set
-	bi, _ := debug.ReadBuildInfo()
 	home, _ := os.UserHomeDir()
 	s.configFile = home + "/.flechade"
-	s.Version = bi.Settings[11].Value
+	s.Ver = GetVer()
+	s.Name = name
+	s.Description = description
 	args := []string{"-s", "-d"}
 	cmd := exec.Command("lsb_release", args...)
 	out, _ := cmd.Output()
-	s.OSrel = string(out)
+	s.osRel = string(out)
 	// Get non root username
 	s.user = os.Getenv("USER")
 	sudoUser, ok := os.LookupEnv("SUDO_USER")
@@ -128,9 +134,58 @@ func NewSet() *Set {
 	return &s
 }
 
-func (ds *Set) SetFiles(fs embed.FS) {
-	ds.files = fs
+func (ds *Set) GetOS() string {
+	return ds.osRel
 }
+
+func LoadSetFromDir(dir fs.FS) (*Set, error) {
+	var s Set
+	s.files = dir
+	//data, err := fs.ReadDir(dir, "flachade.yaml")
+	yfile, err := dir.Open("flechade.yaml")
+	if err != nil {
+		return &s, err
+	}
+	data, err := io.ReadAll(yfile)
+	if err != nil {
+		return &s, err
+	}
+	//fmt.Println(string(data))
+	err = yaml.Unmarshal(data, &s)
+	if err != nil {
+		return &s, err
+	}
+	home, _ := os.UserHomeDir()
+	s.configFile = home + "/.flechade"
+	if !s.checkVersion() {
+		err := errors.New("file version not compatible")
+		return &s, err
+	}
+	args := []string{"-s", "-d"}
+	cmd := exec.Command("lsb_release", args...)
+	out, _ := cmd.Output()
+	s.osRel = string(out)
+	// Get non root username
+	s.user = os.Getenv("USER")
+	sudoUser, ok := os.LookupEnv("SUDO_USER")
+	if ok {
+		s.user = sudoUser
+	}
+	s.uid = os.Getenv("UID")
+	sudoUid, ok := os.LookupEnv("SUDO_UID")
+	if ok {
+		s.uid = sudoUid
+	}
+	return &s, err
+}
+
+func (ds *Set) checkVersion() bool {
+	return true
+}
+
+//func (ds *Set) SetFiles(fs embed.FS) {
+//	ds.files = fs
+//}
 
 func (ds *Set) AddStep(desc string, cmdId string, args ...string) error {
 	var err error
@@ -195,7 +250,7 @@ func (ds *Set) execAppendFile(cfg string, dst string) (string, error) {
 		return "", err
 	}
 	defer dstFile.Close()
-	cfgFile, err := ds.files.Open("data/" + cfg)
+	cfgFile, err := ds.files.Open(cfg)
 	if err != nil {
 		return "", err
 	}
@@ -510,7 +565,7 @@ func (ds *Set) execEnableZsh() (string, error) {
 }
 
 func (ds *Set) execInstallGnomeSettings(cfg string) (string, error) {
-	cfgFile, err := ds.files.Open("data/" + cfg)
+	cfgFile, err := ds.files.Open(cfg)
 	if err != nil {
 		return "", err
 	}
@@ -564,7 +619,7 @@ func (ds *Set) execCopyFile(fileName string, dstDir string) (string, error) {
 		return "", err
 	}
 	defer dstFile.Close()
-	cfgFile, err := ds.files.Open("data/" + fileName)
+	cfgFile, err := ds.files.Open(fileName)
 	if err != nil {
 		return "", err
 	}
@@ -580,7 +635,7 @@ func (ds *Set) execInstallUserConfig(fileName string) (string, error) {
 		return "", err
 	}
 	defer dstFile.Close()
-	cfgFile, err := ds.files.Open("data/" + fileName)
+	cfgFile, err := ds.files.Open(fileName)
 	if err != nil {
 		return "", err
 	}
@@ -594,6 +649,13 @@ func (ds *Set) execInstallUserConfig(fileName string) (string, error) {
 }
 
 func (ds *Set) Run() {
+
+	if os.Geteuid() != 0 {
+		log.Fatal("This tool needs root access. Please use sudo.")
+	}
+
+	fmt.Print("Setting up the environment: " + ds.Name)
+
 	var err error
 	var spinner *yacspin.Spinner
 	var cfg yacspin.Config

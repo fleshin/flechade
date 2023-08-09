@@ -1,0 +1,171 @@
+ver: 0.0.2
+name: default
+description: Golang MacGamer - UI language of Mac,  Steam for gaming and Golang develompment
+  tools and terminal tweaks
+steps:
+- command: CopyFile
+  params:
+  - sources.list
+  - /etc/apt
+  desc: Installing Debian Testing sources
+- command: CopyFile
+  params:
+  - google-chrome.list
+  - /etc/apt/sources.list.d/
+  desc: Google Chrome repo sources
+- command: AddRepoKey
+  params:
+  - https://dl.google.com/linux/linux_signing_key.pub
+  - /etc/apt/keyrings/linux_signing_key.pub
+  desc: Adding Google public keys
+- command: CopyFile
+  params:
+  - vscode.list
+  - /etc/apt/sources.list.d/
+  desc: MS VSCode repo sources
+- command: AddRepoKey
+  params:
+  - https://packages.microsoft.com/keys/microsoft.asc
+  - /etc/apt/keyrings/packages.microsoft.asc
+  desc: Adding MS public keys
+- command: AddArch
+  params:
+  - i386
+  desc: Enabling 32bit packages
+- command: UpdateRepos
+  desc: Updating package repositories
+- command: UpgradePackages
+  desc: Upgrading packages
+- command: EnableFlatpak
+  desc: Enabling Flatpaks
+- command: InstallPackages
+  params:
+  - zsh nala lsd fonts-font-awesome neofetch mc tmux curl plocate libvirt-clients
+    virt-manager sassc dbus-x11 avahi-daemon 
+  desc: Installing system tools
+- command: AssignGroups
+  params:
+  - kvm,libvirt
+  desc: Making user member of virt groups
+- command: InstallPackages
+  params:
+  - git build-essential golang libgl1-mesa-dev xorg-dev libglib2.0-dev-bin
+  desc: Installing basic development env
+- command: EnableAptFile
+  desc: Enabling apt-file
+- command: InstallFlatpaks
+  params:
+  - com.github.tchx84.Flatseal com.usebottles.bottles com.github.wwmm.easyeffects
+    net.davidotek.pupgui2 com.slack.Slack org.gnome.Geary
+  desc: Installing Flatpak apps
+- command: InstallPackages
+  params:
+  - google-chrome-stable
+  desc: Installing Google Chrome
+- command: InstallPackages
+  params:
+  - code
+  desc: Installing VS Code
+- command: InstallPackages
+  params:
+  - mesa-vulkan-drivers libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386
+    steam-installer
+  desc: Installing Steam
+- command: CloneAndRun
+  params:
+  - https://github.com/ryanoasis/nerd-fonts.git
+  - install.sh --install-to-system-path
+  desc: Installing Nerd fonts
+- command: InstallGnomeExt
+  params:
+  - dash-to-dock@micxgx.gmail.com
+  - "84"
+  desc: Installing Gnome Extension Dash to Dock
+- command: InstallGnomeExt
+  params:
+  - openweather-extension@jenslody.de
+  - "121"
+  desc: Installing Gnome Extension OpenWheater
+- command: InstallGnomeExt
+  params:
+  - trayIconsReloaded@selfmade.pl
+  - "26"
+  desc: Installing Gnome Extension Tray Icons
+- command: InstallGnomeExt
+  params:
+  - blur-my-shell@aunetx
+  - "47"
+  desc: Installing Gnome Extension Blur My Shell
+- command: EnableGnomeExt
+  params:
+  - user-theme@gnome-shell-extensions.gcampax.github.com
+  desc: Enabling Gnome Extension User Themes
+- command: CloneAndRunAsUser
+  params:
+  - https://github.com/vinceliuice/WhiteSur-gtk-theme.git
+  - install.sh -l -c Light
+  desc: Installing WhiteSur Gnome theme
+- command: CloneAndRun
+  params:
+  - https://github.com/vinceliuice/WhiteSur-gtk-theme.git
+  - install.sh -N mojave
+  desc: Installing WhiteSur Nautilus theme
+- command: CloneAndRun
+  params:
+  - https://github.com/vinceliuice/WhiteSur-gtk-theme.git
+  - tweaks.sh -g
+  desc: Installing WhiteSur GDM tweaks
+- command: CloneAndRun
+  params:
+  - https://github.com/vinceliuice/WhiteSur-gtk-theme.git
+  - tweaks.sh -F
+  desc: Installing WhiteSur Flatpak tweaks
+- command: CloneAndRun
+  params:
+  - https://github.com/vinceliuice/WhiteSur-icon-theme.git
+  - install.sh -a -b
+  desc: Installing WhiteSur Icons
+- command: CloneAndRun
+  params:
+  - https://github.com/vinceliuice/grub2-themes.git
+  - install.sh -t whitesur
+  desc: Installing Grub Theme
+- command: InstallGnomeSettings
+  params:
+  - dconf.toml
+  desc: Loading Gnome Settings
+- command: CreateDir
+  params:
+  - /etc/pipewire
+  desc: Creating pipewire directory
+- command: CopyFile
+  params:
+  - pipewire.conf
+  - /etc/pipewire
+  desc: Enabling HiFi audio
+- command: CloneAndRunAsUser
+  params:
+  - https://github.com/ohmyzsh/ohmyzsh.git
+  - tools/install.sh --unattended
+  desc: Installing Oh My Zsh
+- command: EnableZsh
+  desc: Enabling Zsh
+- command: InstallZshPlugin
+  params:
+  - https://github.com/zsh-users/zsh-syntax-highlighting.git
+  desc: Installing Zsh Highlighting plugin
+- command: InstallZshPlugin
+  params:
+  - https://github.com/zsh-users/zsh-autosuggestions.git
+  desc: Installing Zsh Autosuggestions plugin
+- command: InstallUserConfig
+  params:
+  - .zshrc
+  desc: Installing Zsh settings
+- command: CloneAndRun
+  params:
+  - https://github.com/vinceliuice/WhiteSur-gtk-theme.git
+  - tweaks.sh -d
+  desc: Installing WhiteSur Dock tweaks
+
+
