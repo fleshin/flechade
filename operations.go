@@ -10,11 +10,8 @@ import (
 	"strings"
 
 	"github.com/fleshin/flechade/run"
+	git "gopkg.in/src-d/go-git.v4"
 )
-
-func showHelp() {
-	fmt.Println("Help!")
-}
 
 func showVersion() {
 	fmt.Println("flechade - customize your linux")
@@ -68,5 +65,16 @@ func runFromDir(dataDir string) {
 }
 
 func runFromUrl(repoUrl string) {
-
+	tgtDir := "/tmp/flechade-repo"
+	err := os.RemoveAll(tgtDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = git.PlainClone(tgtDir, false, &git.CloneOptions{
+		URL: repoUrl,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	runFromDir(tgtDir)
 }

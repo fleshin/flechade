@@ -12,10 +12,9 @@ func main() {
 
 	showVersion()
 
-	dataDir := flag.String("d", "", "directory to load from")
-	repoUrl := flag.String("u", "", "GIT repo to load from")
-	//help := flag.Bool("h", false, "Print usage help")
-	runSet := flag.Bool("l", false, "Run default configuration set")
+	dataDir := flag.String("d", "", "Load customizations from local directory")
+	repoUrl := flag.String("r", "", "Load customizations from GIT repository")
+	runSet := flag.Bool("l", false, "Run default customizations")
 
 	flag.Parse()
 
@@ -28,6 +27,5 @@ func main() {
 		runFromUrl(*repoUrl)
 	default:
 		flag.Usage()
-
 	}
 }
