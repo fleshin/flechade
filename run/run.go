@@ -118,7 +118,7 @@ func NewSet(name, description string) *Set {
 	s.Description = description
 	args := []string{"-s", "-d"}
 	cmd := exec.Command("lsb_release", args...)
-	out, _ := cmd.Output()
+	out, _ := cmd.CombinedOutput()
 	s.osRel = string(out)
 	// Get non root username
 	s.user = os.Getenv("USER")
@@ -163,7 +163,7 @@ func LoadSetFromDir(dir fs.FS) (*Set, error) {
 	}
 	args := []string{"-s", "-d"}
 	cmd := exec.Command("lsb_release", args...)
-	out, _ := cmd.Output()
+	out, _ := cmd.CombinedOutput()
 	s.osRel = string(out)
 	// Get non root username
 	s.user = os.Getenv("USER")
@@ -240,7 +240,7 @@ func (ds *Set) execAppendFile(cfg string, dst string) (string, error) {
 
 	args := []string{"-q", "flechade", dst}
 	Cmd := exec.Command("grep", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	if err == nil {
 		return string(out), err
 	}
@@ -264,7 +264,7 @@ func (ds *Set) execAppendFile(cfg string, dst string) (string, error) {
 func (ds *Set) execAddGroup(groupName string) (string, error) {
 	argGroup := []string{groupName}
 	groupCmd := exec.Command("groupadd", argGroup...)
-	out, err := groupCmd.Output()
+	out, err := groupCmd.CombinedOutput()
 	if err == nil {
 		return string(out), err
 	}
@@ -279,45 +279,45 @@ func (ds *Set) execAddGroup(groupName string) (string, error) {
 func (ds *Set) execAssignGroups(groups string) (string, error) {
 	args := []string{"-aG", groups, ds.user}
 	Cmd := exec.Command("usermod", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execPrimaryGroup(user string, pg string) (string, error) {
 	args := []string{"-g", pg, user}
 	Cmd := exec.Command("usermod", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execReplace(subReg string, file string) (string, error) {
 	argSed := []string{"-Ei", "-e", subReg, file}
 	sedCmd := exec.Command("sed", argSed...)
-	out, err := sedCmd.Output()
+	out, err := sedCmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execChangeOwner(owner string, file string) (string, error) {
 	argSed := []string{"-R", owner, file}
 	sedCmd := exec.Command("chown", argSed...)
-	out, err := sedCmd.Output()
+	out, err := sedCmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execChangePerm(mode string, file string) (string, error) {
 	argChmod := []string{"-R", mode, file}
 	chmodCmd := exec.Command("chmod", argChmod...)
-	out, err := chmodCmd.Output()
+	out, err := chmodCmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execReloadSysctl() (string, error) {
 	args := []string{"-p"}
 	Cmd := exec.Command("sysctl", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	args = []string{"-a"}
 	Cmd = exec.Command("sysctl", args...)
-	out, err = Cmd.Output()
+	out, err = Cmd.CombinedOutput()
 	return string(out), err
 }
 
@@ -329,7 +329,7 @@ func (ds *Set) execUpdateRepos() (string, error) {
 	Cmd.Env = append(Cmd.Env, "DEBCONF_NONINTERACTIVE_SEEN=true")
 	Cmd.Env = append(Cmd.Env, "APT_LISTCHANGES_FRONTEND=none")
 	Cmd.Env = append(Cmd.Env, "NEEDRESTART_MODE=a")
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
@@ -341,7 +341,7 @@ func (ds *Set) execUpgradePackages() (string, error) {
 	Cmd.Env = append(Cmd.Env, "APT_LISTCHANGES_FRONTEND=none")
 	Cmd.Env = append(Cmd.Env, "NEEDRESTART_MODE=a")
 	Cmd.Env = append(Cmd.Env, "DEBIAN_FRONTEND=noninteractive")
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
@@ -351,14 +351,14 @@ func (ds *Set) execAddArch(arch string) (string, error) {
 	Cmd.Env = os.Environ()
 	Cmd.Env = append(Cmd.Env, "DEBCONF_NONINTERACTIVE_SEEN=true")
 	Cmd.Env = append(Cmd.Env, "DEBIAN_FRONTEND=noninteractive")
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execReloadUnits() (string, error) {
 	args := []string{"daemon-reload"}
 	Cmd := exec.Command("systemctl", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
@@ -372,7 +372,7 @@ func (ds *Set) execInstallPackages(pkgs string) (string, error) {
 	Cmd.Env = append(Cmd.Env, "APT_LISTCHANGES_FRONTEND=none")
 	Cmd.Env = append(Cmd.Env, "NEEDRESTART_MODE=a")
 	Cmd.Env = append(Cmd.Env, "DEBIAN_FRONTEND=noninteractive")
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
@@ -381,7 +381,7 @@ func (ds *Set) execInstallFlatpaks(pkgs string) (string, error) {
 	plist := strings.Split(pkgs, " ")
 	args = append(args, plist...)
 	Cmd := exec.Command("flatpak", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
@@ -391,7 +391,7 @@ func (ds *Set) execEnableAptFile() (string, error) {
 		return out, err
 	}
 	Cmd := exec.Command("apt-file", "update")
-	output, err := Cmd.Output()
+	output, err := Cmd.CombinedOutput()
 	return string(output), err
 }
 
@@ -404,49 +404,49 @@ func (ds *Set) execEnableFlatpak() (string, error) {
 	//Adding flathub repo
 	args := []string{"remote-add", "--if-not-exists", "flathub", "https://flathub.org/repo/flathub.flatpakrepo"}
 	Cmd := exec.Command("flatpak", args...)
-	output, err := Cmd.Output()
+	output, err := Cmd.CombinedOutput()
 	if err != nil {
 		return string(output), err
 	}
 	//Pulling available packages
 	args = []string{"update", "--noninteractive", "--assumeyes"}
 	Cmd = exec.Command("flatpak", args...)
-	output, err = Cmd.Output()
+	output, err = Cmd.CombinedOutput()
 	if err != nil {
 		return string(output), err
 	}
 	//Prividing access to themes
 	args = []string{"override", "--filesystem=~/.themes", "--filesystem=~/.icons", "--filesystem=xdg-config/gtk-4.0"}
 	Cmd = exec.Command("flatpak", args...)
-	output, err = Cmd.Output()
+	output, err = Cmd.CombinedOutput()
 	return string(output), err
 }
 
 func (ds *Set) execEnableService(svc string) (string, error) {
 	args := []string{"enable", svc}
 	Cmd := exec.Command("systemctl", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execUnzipFile(file string, dir string) (string, error) {
 	args := []string{"-n", file, "-d", dir}
 	Cmd := exec.Command("unzip", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execUntar(file string, dir string) (string, error) {
 	args := []string{"xf", file, "-C", dir, "--strip-components=1"}
 	Cmd := exec.Command("tar", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execAddUser(name string) (string, error) {
 	args := []string{"-m", name}
 	Cmd := exec.Command("useradd", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	if err == nil {
 		return string(out), err
 	}
@@ -462,7 +462,7 @@ func (ds *Set) execCloneRepo(repo string, dir string) (string, error) {
 	Cmd := exec.Command("git", args...)
 	Cmd.Env = os.Environ()
 	Cmd.Env = append(Cmd.Env, "GIT_SSL_NO_VERIFY=true")
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
@@ -480,7 +480,7 @@ func (ds *Set) execCloneAndRun(repo, command string) (string, error) {
 	}
 	args := clist[1:]
 	Cmd := exec.Command("/tmp/"+rname+"/"+xfile, args...)
-	output, err := Cmd.Output()
+	output, err := Cmd.CombinedOutput()
 	return string(output), err
 }
 
@@ -507,7 +507,7 @@ func (ds *Set) execCloneAndRunAsUser(repo, command string) (string, error) {
 	concCmd := "/tmp/" + rname + "/" + xfile + " " + concParms
 	flags := append([]string{ds.user, "-c"}, concCmd)
 	Cmd := exec.Command("su", flags...)
-	output, err := Cmd.Output()
+	output, err := Cmd.CombinedOutput()
 	return string(output), err
 }
 
@@ -579,28 +579,28 @@ func (ds *Set) execInstallGnomeSettings(cfg string) (string, error) {
 func (ds *Set) execRun(cmd string) (string, error) {
 	args := []string{}
 	Cmd := exec.Command(cmd, args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execDownload(url string, file string) (string, error) {
 	args := []string{"--continue", url, "-O", file}
 	Cmd := exec.Command("wget", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
 func (ds *Set) execAddRepoKey(URL string, file string) (string, error) {
 	args := []string{"--continue", URL, "-O", file}
 	Cmd := exec.Command("wget", args...)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 
 	if err != nil {
 		return string(out), err
 	}
 	args = []string{"--batch", "--yes", "--dearmor", file}
 	Cmd = exec.Command("gpg", args...)
-	out, err = Cmd.Output()
+	out, err = Cmd.CombinedOutput()
 
 	return string(out), err
 }
@@ -609,7 +609,7 @@ func (ds *Set) execSetPass(user string, pass string) (string, error) {
 	args := []string{}
 	Cmd := exec.Command("chpasswd", args...)
 	Cmd.Stdin = strings.NewReader(user + ":" + pass)
-	out, err := Cmd.Output()
+	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
 
