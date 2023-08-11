@@ -44,7 +44,7 @@ sudo ./flechade -d /tmp/custom-flechade
 ```
 Load customization from a GIT repository
 ```
-sudo ./flechade -r https://github.com/fleshin/flechade-normie
+sudo ~/go/bin/flechade -r https://github.com/fleshin/flechade-normie
 ```
 
 ## Examples of default customization
