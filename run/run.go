@@ -377,7 +377,7 @@ func (ds *Set) execInstallPackages(pkgs string) (string, error) {
 }
 
 func (ds *Set) execInstallFlatpaks(pkgs string) (string, error) {
-	args := []string{"install", "--noninteractive", "--assumeyes", "-v", "flathub"}
+	args := []string{"install", "--noninteractive", "--assumeyes", "-v"}
 	plist := strings.Split(pkgs, " ")
 	args = append(args, plist...)
 	Cmd := exec.Command("flatpak", args...)
