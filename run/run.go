@@ -628,8 +628,15 @@ func (ds *Set) execCopyFile(fileName string, dstDir string) (string, error) {
 	return "", err
 }
 
-func (ds *Set) execInstallUserConfig(fileName string) (string, error) {
-	dstName := "/home/" + ds.user + "/" + fileName
+func (ds *Set) execInstallUserConfig(fileName, relDir string) (string, error) {
+	dstDir := "/home/" + ds.user + "/" + relDir
+	dstName := dstDir + "/" + fileName
+
+	err := os.MkdirAll(dstDir, 0755)
+	if err != nil {
+		return "", err
+	}
+
 	dstFile, err := os.OpenFile(dstName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return "", err
@@ -755,7 +762,7 @@ func (ds *Set) Run() {
 		case "EnableZsh":
 			out, err = ds.execEnableZsh()
 		case "InstallUserConfig":
-			out, err = ds.execInstallUserConfig(step.Params[0])
+			out, err = ds.execInstallUserConfig(step.Params[0], step.Params[1])
 		}
 		if err != nil {
 			step.Status.ErrLvl = 1
