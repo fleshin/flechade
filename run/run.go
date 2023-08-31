@@ -637,7 +637,7 @@ func (ds *Set) execInstallUserConfig(fileName, relDir string) (string, error) {
 		return "", err
 	}
 
-	dstFile, err := os.OpenFile(dstName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+	dstFile, err := os.OpenFile(dstName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0744)
 	if err != nil {
 		return "", err
 	}
