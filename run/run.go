@@ -49,6 +49,7 @@ func init() {
 		"UpdateRepos",
 		"InstallPackages",
 		"InstallFlatpaks",
+		"InstallPip",
 		"UpgradePackages",
 		"AddArch",
 		"EnableFlatpak",
@@ -381,6 +382,15 @@ func (ds *Set) execInstallFlatpaks(pkgs string) (string, error) {
 	plist := strings.Split(pkgs, " ")
 	args = append(args, plist...)
 	Cmd := exec.Command("flatpak", args...)
+	out, err := Cmd.CombinedOutput()
+	return string(out), err
+}
+
+func (ds *Set) execInstallPip(pkgs string) (string, error) {
+	args := []string{"-m", "pip", "install", "--break-system-packages"}
+	plist := strings.Split(pkgs, " ")
+	args = append(args, plist...)
+	Cmd := exec.Command("python3", args...)
 	out, err := Cmd.CombinedOutput()
 	return string(out), err
 }
@@ -747,6 +757,8 @@ func (ds *Set) Run() {
 			out, err = ds.execEnableAptFile()
 		case "InstallFlatpaks":
 			out, err = ds.execInstallFlatpaks(step.Params[0])
+		case "InstallPip":
+			out, err = ds.execInstallPip(step.Params[0])
 		case "CloneAndRun":
 			out, err = ds.execCloneAndRun(step.Params[0], step.Params[1])
 		case "CloneAndRunAsUser":
