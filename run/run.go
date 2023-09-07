@@ -647,6 +647,11 @@ func (ds *Set) execInstallUserConfig(fileName, relDir string) (string, error) {
 		return "", err
 	}
 
+	if relDir != "" {
+		parts := strings.Split(relDir, "/")
+		ds.execChangeOwner(ds.user, "/home/"+ds.user+"/"+parts[0])
+	}
+
 	dstFile, err := os.OpenFile(dstName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0744)
 	if err != nil {
 		return "", err
