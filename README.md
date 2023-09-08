@@ -13,6 +13,11 @@ I know most ditros are just that, a tuned version of a "core" distro, so I would
 
 IMHO, RedHat is has a record of messing up things and I think .deb is far more popular than rpm. Arch is ideal for customization, but might be to much of a moving target to build on top of. So, Debian stable is great for stability but might get on the oudated side, while debian testing would be my sweet spot regarding stability/freshness (feel free to disagree on that, this is just my personal preference)
 
+## Solution 
+The tool reads a GIT repository with a single YAML file and resources that will coordinate themes and customizations across the system such as grub2 backgrounds, plymouth themes, gdm3/lightdm, gnome extenstions, polybar themes, custom shells, extra fonts, etc. 
+There is no need for scripting skills and anyone can fork one of the examples and modify at will from there.
+The YAML file contains simple "commands" that allow to download files, copy, etc while hidding all the details and complexity (check the flechade.yaml file from the example repos).
+
 ## Build
 Build and install through Go toolset:
 ```
