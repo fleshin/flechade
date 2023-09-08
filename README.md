@@ -47,18 +47,28 @@ Load customization from a GIT repository
 sudo ~/go/bin/flechade -r https://github.com/fleshin/flechade-normie
 ```
 
-## Examples of default customization
-
-<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss0.png"/> </p>
-
-<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss1.png"/> </p>
+## Sreenshots of Golang MacGamer (default)
 
 <p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss2.png"/> </p>
 
-<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss3.png"/> </p>
-
-<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss4.png"/> </p>
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss1.png"/> </p>
 
 <p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss5.png"/> </p>
 
+## Sreenshots of Tracie Progsock
 
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/tp1.png"/> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/tp2.png"/> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/tp3.png"/> </p>
+
+## Sreenshots of Normie Winoffice
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/nw1.png"/> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/nw2.png"/> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/nw3.png"/> </p>
+
+<p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/nw4.png"/> </p>
