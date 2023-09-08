@@ -55,7 +55,7 @@ sudo ~/go/bin/flechade -r https://github.com/fleshin/flechade-normie
 
 <p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/ss5.png"/> </p>
 
-## Sreenshots of Tracie Progsock
+## Sreenshots of [Tracie Progsock](https://github.com/fleshin/flechade-tracie)
 
 <p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/tp1.png"/> </p>
 
@@ -63,7 +63,7 @@ sudo ~/go/bin/flechade -r https://github.com/fleshin/flechade-normie
 
 <p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/tp3.png"/> </p>
 
-## Sreenshots of Normie Winoffice
+## Sreenshots of [Normie Winoffice](https://github.com/fleshin/flechade-normie)
 
 <p align="center"> <img src="https://raw.githubusercontent.com/fleshin/fleshin/master/nw1.png"/> </p>
 
