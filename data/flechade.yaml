@@ -161,6 +161,7 @@ steps:
 - command: InstallUserConfig
   params:
   - .zshrc
+  - .
   desc: Installing Zsh settings
 - command: CloneAndRun
   params:
