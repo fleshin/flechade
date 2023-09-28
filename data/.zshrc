@@ -101,4 +101,3 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ls='lsd'
 alias apt='sudo nala'
-alias less='batcat'
