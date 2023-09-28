@@ -21,7 +21,7 @@ var Commands []string
 var version string
 
 func init() {
-	version = "0.0.2"
+	version = "0.0.4"
 	Commands = []string{
 		//Basic file ops
 		"CreateDir",
@@ -184,10 +184,6 @@ func (ds *Set) checkVersion() bool {
 	return true
 }
 
-//func (ds *Set) SetFiles(fs embed.FS) {
-//	ds.files = fs
-//}
-
 func (ds *Set) AddStep(desc string, cmdId string, args ...string) error {
 	var err error
 	var stp step
@@ -198,13 +194,11 @@ func (ds *Set) AddStep(desc string, cmdId string, args ...string) error {
 	stp.Command = cmdId
 	stp.Desc = desc
 	ds.Steps = append(ds.Steps, stp)
-	ds.saveStats()
+	err = ds.saveStats()
 	return err
 }
 
 func (s *Set) Load() error {
-	//var s Set
-	//home, _ := os.UserHomeDir()
 	file, err := os.Open(s.configFile)
 	if err != nil {
 		//log.Println("Config file does not exist.")
@@ -217,7 +211,6 @@ func (s *Set) Load() error {
 }
 
 func (s *Set) saveStats() error {
-	//home, _ := os.UserHomeDir()
 	file, err := os.Create(s.configFile)
 	if err != nil {
 		log.Fatal("Unable to save config file:", err)
@@ -652,7 +645,10 @@ func (ds *Set) execInstallUserConfig(fileName, relDir string) (string, error) {
 
 	if relDir != "" {
 		parts := strings.Split(relDir, "/")
-		ds.execChangeOwner(ds.user, "/home/"+ds.user+"/"+parts[0])
+		out, err := ds.execChangeOwner(ds.user, "/home/"+ds.user+"/"+parts[0])
+		if err != nil {
+			return out, err
+		}
 	}
 
 	dstFile, err := os.OpenFile(dstName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0744)
@@ -708,7 +704,7 @@ func (ds *Set) Run() {
 			StopFailColors:    []string{"fgRed"},
 		}
 		spinner, _ = yacspin.New(cfg)
-		spinner.Start()
+		_ = spinner.Start()
 
 		switch step.Command {
 		case "CreateDir":
@@ -788,16 +784,15 @@ func (ds *Set) Run() {
 			step.Status.ErrLvl = 1
 			step.Status.Message = err.Error()
 			ds.Steps[i] = step
-			ds.saveStats()
-			//fmt.Println("STATUS:", spinner.Status().String())
+			_ = ds.saveStats()
 			spinner.StopFailMessage(step.Desc + ": " + err.Error())
-			spinner.StopFail()
+			_ = spinner.StopFail()
 			log.Fatal(out)
 		} else {
 			step.Complete = true
 			ds.Steps[i] = step
-			ds.saveStats()
-			spinner.Stop()
+			_ = ds.saveStats()
+			_ = spinner.Stop()
 		}
 	}
 }
