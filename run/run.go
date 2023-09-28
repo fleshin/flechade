@@ -206,11 +206,11 @@ func (s *Set) Load() error {
 	//var s Set
 	//home, _ := os.UserHomeDir()
 	file, err := os.Open(s.configFile)
-	defer file.Close()
 	if err != nil {
 		//log.Println("Config file does not exist.")
 		return err
 	}
+	defer file.Close()
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(s)
 	return err
@@ -219,10 +219,10 @@ func (s *Set) Load() error {
 func (s *Set) saveStats() error {
 	//home, _ := os.UserHomeDir()
 	file, err := os.Create(s.configFile)
-	defer file.Close()
 	if err != nil {
 		log.Fatal("Unable to save config file:", err)
 	}
+	defer file.Close()
 	encoder := json.NewEncoder(file)
 	err = encoder.Encode(s)
 	return err
@@ -316,6 +316,9 @@ func (ds *Set) execReloadSysctl() (string, error) {
 	args := []string{"-p"}
 	Cmd := exec.Command("sysctl", args...)
 	out, err := Cmd.CombinedOutput()
+	if err != nil {
+		return string(out), err
+	}
 	args = []string{"-a"}
 	Cmd = exec.Command("sysctl", args...)
 	out, err = Cmd.CombinedOutput()
