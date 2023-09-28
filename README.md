@@ -1,5 +1,7 @@
 # flechade
-Customize your linux box
+Pack and distribute customizations and themes. Consitent themes all across your Debian box: gnome, gdm, grub, plymouth,etc. Put all your resources on an git repo, define a simple yaml file and apply the customizations consistently on multiple boxes. 
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/fleshin/flechade)](https://goreportcard.com/report/github.com/fleshin/flechade)
 
 ## Motivation
 Everytime I distro hop, get a new computer or install somebody else's computer, I need to spend a good amount of time customizing it to feel at home.
