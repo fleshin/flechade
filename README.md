@@ -38,7 +38,7 @@ On a freshly installed Debian 12 or testing, open a terminal and run below comma
 
 ```
 su - root -c "usermod -aG sudo $USER"; newgrp sudo; 
-sudo flechade -l
+sudo ~/go/bin/flechade -l
 ```
 
 ## Usage
