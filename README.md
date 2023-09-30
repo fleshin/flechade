@@ -23,13 +23,14 @@ The YAML file contains simple "commands" that allow to download files, copy, etc
 ## Build
 Build and install through Go toolset:
 ```
+sudo apt install golang
 go install github.com/fleshin/flechade@latest
 ```
 
 Or, clone the repo and build:
 ```
 git  install http://github.com/fleshin/flechade && cd flechade
-go build -v
+go build
 ```
 
 ## Run
