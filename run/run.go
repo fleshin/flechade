@@ -151,6 +151,9 @@ func (ds *Set) AddStep(desc string, cmdId string, args ...string) error {
 }
 
 func (s *Set) Load() error {
+	var err error
+	home, _ := os.UserHomeDir()
+	s.configFile = home + "/.flechade"
 	file, err := os.Open(s.configFile)
 	if err != nil {
 		//log.Println("Config file does not exist.")
@@ -159,6 +162,29 @@ func (s *Set) Load() error {
 	defer file.Close()
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(s)
+	if err != nil {
+		return err
+	}
+	s.files = os.DirFS(s.DirName)
+	if !s.checkVersion() {
+		err = errors.New("yaml file version not compatible")
+		return err
+	}
+	args := []string{"-s", "-d"}
+	cmd := exec.Command("lsb_release", args...)
+	out, _ := cmd.CombinedOutput()
+	s.osRel = string(out)
+	// Get non root username
+	s.user = os.Getenv("USER")
+	sudoUser, ok := os.LookupEnv("SUDO_USER")
+	if ok {
+		s.user = sudoUser
+	}
+	s.uid = os.Getenv("UID")
+	sudoUid, ok := os.LookupEnv("SUDO_UID")
+	if ok {
+		s.uid = sudoUid
+	}
 	return err
 }
 

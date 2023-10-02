@@ -76,3 +76,12 @@ func runFromUrl(repoUrl string) {
 	}
 	runFromDir(tgtDir)
 }
+
+func contPrevRun() {
+	set := new(run.Set)
+	err := set.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
+	set.Run()
+}

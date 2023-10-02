@@ -15,10 +15,13 @@ func main() {
 	dataDir := flag.String("d", "", "Load customizations from local directory")
 	repoUrl := flag.String("r", "", "Load customizations from GIT repository")
 	runSet := flag.Bool("l", false, "Run default customizations")
+	cont := flag.Bool("c", false, "Continue previous execution from the last successful step")
 
 	flag.Parse()
 
 	switch {
+	case *cont:
+		contPrevRun()
 	case *runSet:
 		runFromLocal(configFS)
 	case *dataDir != "":
