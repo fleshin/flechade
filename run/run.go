@@ -46,6 +46,7 @@ type Set struct {
 	Ver         string
 	osRel       string
 	configFile  string
+	DirName     string
 	files       fs.FS
 	Name        string
 	Description string
@@ -87,11 +88,13 @@ func (ds *Set) GetOS() string {
 	return ds.osRel
 }
 
-func LoadSetFromDir(dir fs.FS) (*Set, error) {
+func LoadSetFromDir(dir string) (*Set, error) {
 	var s Set
-	s.files = dir
+	s.DirName = dir
+	s.files = os.DirFS(dir)
+	//s.files = dir
 	//data, err := fs.ReadDir(dir, "flachade.yaml")
-	yfile, err := dir.Open("flechade.yaml")
+	yfile, err := s.files.Open("flechade.yaml")
 	if err != nil {
 		return &s, err
 	}
@@ -99,7 +102,6 @@ func LoadSetFromDir(dir fs.FS) (*Set, error) {
 	if err != nil {
 		return &s, err
 	}
-	//fmt.Println(string(data))
 	err = yaml.Unmarshal(data, &s)
 	if err != nil {
 		return &s, err

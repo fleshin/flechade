@@ -54,9 +54,7 @@ func runFromLocal(cfgFS embed.FS) {
 }
 
 func runFromDir(dataDir string) {
-	dirfs := os.DirFS(dataDir)
-
-	set, err := run.LoadSetFromDir(dirfs)
+	set, err := run.LoadSetFromDir(dataDir)
 	if err != nil {
 		log.Fatal(err)
 	}
