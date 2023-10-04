@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"time"
 
+	ver "github.com/hashicorp/go-version"
 	"github.com/theckman/yacspin"
 	"gopkg.in/yaml.v3"
 )
@@ -130,7 +131,12 @@ func LoadSetFromDir(dir string) (*Set, error) {
 	return &s, err
 }
 
-func (ds *Set) checkVersion() bool {
+func (s *Set) checkVersion() bool {
+	runVer, _ := ver.NewVersion(GetVer())
+	fileVer, _ := ver.NewVersion(s.Ver)
+	if runVer.LessThan(fileVer) {
+		fmt.Printf("warining: This program version %s is trying to read from more rencent version files  %s\n", runVer, fileVer)
+	}
 	return true
 }
 
