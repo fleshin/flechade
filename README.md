@@ -29,7 +29,7 @@ go install github.com/fleshin/flechade@latest
 
 Or, clone the repo and build:
 ```
-git  install http://github.com/fleshin/flechade && cd flechade
+git  clone http://github.com/fleshin/flechade && cd flechade
 go build
 ```
 
