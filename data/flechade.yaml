@@ -41,7 +41,7 @@ steps:
 - command: InstallPackages
   params:
   - zsh nala lsd fonts-font-awesome neofetch mc tmux curl plocate libvirt-clients
-    virt-manager sassc dbus-x11 avahi-daemon 
+    sassc dbus-x11 avahi-daemon 
   desc: Installing system tools
 - command: AssignGroups
   params:
