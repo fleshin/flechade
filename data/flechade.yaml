@@ -40,7 +40,7 @@ steps:
   desc: Enabling Flatpaks
 - command: InstallPackages
   params:
-  - zsh nala lsd fonts-font-awesome neofetch mc tmux curl plocate libvirt-clients
+  - zsh nala lsd fonts-font-awesome  mc tmux curl plocate libvirt-clients
     sassc dbus-x11 avahi-daemon 
   desc: Installing system tools
 - command: AssignGroups
